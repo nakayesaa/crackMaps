@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cinttypes>
 #include <cmath>
 #include <vector>
 
@@ -16,4 +17,18 @@ double ddxRelu(double x) {
     return 0.0;
 }
 
-std::vector<double> reluVector()
+std::vector<double> reluVector(const std::vector<double> &input) {
+  std::vector<double> output;
+  for (double value : input) {
+    output.push_back(relu(value));
+  }
+  return output;
+}
+
+std::vector<double> ddxReluVector(const std::vector<double> &input) {
+  std::vector<double> output;
+  for (double value : input) {
+    output.push_back(ddxRelu(value));
+  }
+  return output;
+}

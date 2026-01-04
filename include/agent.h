@@ -1,5 +1,6 @@
 #include <cerrno>
 #include <iterator>
+#include <limits>
 #include <random>
 #include <vector>
 class qLearning {
@@ -29,8 +30,8 @@ public:
       int action = actionDistribution(rng);
       return action;
     } else {
-      int bestAction;
-      int maxValue = -999999;
+      int bestAction = 0;
+      double maxValue = -std::numeric_limits<double>::infinity();
 
       for (int i = 0; i < 4; i++) {
         if (qTabular[ii][jj][i] > maxValue) {
@@ -45,14 +46,16 @@ public:
   void learn(int currentI, int currentJ, int nextI, int nextJ, double reward,
              int action) {
     double previousQ = qTabular[currentI][currentJ][action];
-    double maxValue = -99999;
+    double maxValue = -std::numeric_limits<double>::infinity();
     for (int i = 0; i < 4; i++) {
       if (qTabular[nextI][nextJ][i] > maxValue)
         maxValue = qTabular[nextI][nextJ][i];
-
-      double newQ = previousQ + alpha * (reward + gamma * maxValue - previousQ);
-      qTabular[nextI][nextJ][action] = newQ;
     }
+    if (maxValue == -std::numeric_limits<double>::infinity())
+      maxValue = 0.0;
+
+    double newQ = previousQ + alpha * (reward + (gamma * maxValue) - previousQ);
+    qTabular[currentI][currentJ][action] = newQ;
   }
 
   void epsilonDelta() {

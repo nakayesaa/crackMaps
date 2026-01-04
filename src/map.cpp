@@ -1,9 +1,7 @@
 #include "../include/map.h"
+#include "queue"
 #include "random"
 #include "vector"
-
-std::vector<std::vector<int>>
-checkNeighbors(const std::vector<std::vector<int>> &maze, int i, int j);
 
 std::vector<std::vector<int>> backtrackMaze(int width, int height) {
   if (width % 2 == 0)

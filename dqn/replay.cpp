@@ -1,15 +1,11 @@
-#include "algorithm"
-#include "deque"
-#include "random"
-#include "vector"
+;
 #include <algorithm>
-#include <cstddef>
 #include <deque>
 #include <iterator>
 #include <random>
 #include <vector>
 
-struct buffer {
+struct Experience {
   int action;
   double reward;
   std::vector<double> currentState;
@@ -17,25 +13,26 @@ struct buffer {
   bool isDone;
 };
 
-class replayBuffer {
+class replay {
 public:
-  std::deque<buffer> Buffer;
+  std::deque<Experience> replayBuffer;
   std::size_t maxSize;
 
-  replayBuffer(std::size_t size) : maxSize(size) {}
+  replay(std::size_t size) : maxSize(size) {}
 
-  void add(buffer buff) {
-    Buffer.push_back(buff);
-    if (Buffer.size() > maxSize)
-      Buffer.pop_front();
+  void add(Experience buff) {
+    replayBuffer.push_back(buff);
+    if (replayBuffer.size() > maxSize)
+      replayBuffer.pop_front();
   }
 
-  std::vector<buffer> sample(int batchSize) {
-    std::vector<buffer> batch;
-    std::sample(Buffer.begin(), Buffer.end(), std::back_inserter(batch),
-                batchSize, std::mt19937{std::random_device{}()});
+  std::vector<Experience> sample(int batchSize) {
+    std::vector<Experience> batch;
+    std::sample(replayBuffer.begin(), replayBuffer.end(),
+                std::back_inserter(batch), batchSize,
+                std::mt19937{std::random_device{}()});
     return batch;
   }
 
-  std::size_t size() { return Buffer.size(); }
+  std::size_t size() { return replayBuffer.size(); }
 };

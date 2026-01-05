@@ -1,5 +1,15 @@
 #include "../dqn/layer.cpp"
 #include <vector>
+
+std::vector<double> vectorSubss(const std::vector<double> &vectorA,
+                                const std::vector<double> &vectorB) {
+  std::vector<double> output;
+  for (int i = 0; i < vectorA.size(); i++) {
+    output[i] = vectorA[i] - vectorB[i];
+  }
+  return output;
+}
+
 class Network {
 private:
   // stack of layer
@@ -26,5 +36,15 @@ public:
       input = layer->forward(input);
     }
     return input;
+  }
+
+  void train(std::vector<double> input, std::vector<double> target,
+             double learningRate) {
+    std::vector<double> output = forwardPass(input);
+    std::vector<double> error = vectorSubs(output, target);
+
+    for (int i = layers.size() - 1; i >= 0; i--) {
+      error = layers[i]->backward(error, learningRate);
+    }
   }
 };

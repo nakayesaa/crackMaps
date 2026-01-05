@@ -1,4 +1,6 @@
+#include "../dqn/activation.cpp"
 #include "../dqn/helper.cpp"
+#include <cstddef>
 #include <vector>
 
 class Layer {
@@ -74,5 +76,36 @@ public:
     }
 
     return error;
+  }
+};
+
+class reluLayer : public Layer {
+public:
+  Layer *clone() override { return new reluLayer(); }
+
+  std::vector<double> forward(const std::vector<double> &inputData) override {
+    input = inputData;
+    std::vector<double> output;
+    output.reserve(inputData.size());
+
+    for (double value : input) {
+      if (value > 0)
+        output.push_back(value);
+      else
+        output.push_back(0.0);
+    }
+    return output;
+  }
+
+  std::vector<double> backward(const std::vector<double> &gradientInput,
+                               double learningRate) override {
+    std::vector<double> gradient;
+    gradient.reserve(gradientInput.size());
+
+    for (std::size_t i = 0; i < gradientInput.size(); i++) {
+      double ddx = ddxRelu(input[i]);
+      gradient.push_back(gradientInput[i] * ddx);
+    }
+    return gradient;
   }
 };

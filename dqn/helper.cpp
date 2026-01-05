@@ -1,4 +1,3 @@
-#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <random>
@@ -37,15 +36,15 @@ transpose(const std::vector<std::vector<double>> &matrix) {
   std::vector<std::vector<double>> finalResult(cols, std::vector<double>(rows));
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
-      finalResult[i][j] = matrix[j][i];
+      finalResult[j][i] = matrix[i][j];
     }
   }
   return finalResult;
 }
 
 std::vector<std::vector<double>> assignWeigth(int rows, int cols) {
-  std::random_device rd;
-  std::mt19937 generateRandom(rd());
+  static std::random_device rd;
+  static std::mt19937 generateRandom(rd());
 
   std::vector<std::vector<double>> weigth(rows, std::vector<double>(cols));
   double bound = std::sqrt(6.0 / (rows + cols));

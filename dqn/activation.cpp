@@ -1,5 +1,3 @@
-#include <algorithm>
-#include <cinttypes>
 #include <cmath>
 #include <vector>
 

@@ -10,6 +10,7 @@ public:
   virtual std::vector<double> backward(const std::vector<double> &inputError,
                                        double learningRate) = 0;
   virtual Layer *clone() = 0;
+  virtual ~Layer() = default;
 };
 
 class linearLayer : public Layer {
@@ -23,7 +24,7 @@ public:
     inputLayer = input;
     outputLayer = output;
     weigth = assignWeigth(output, input);
-    bias.assign(output, 0);
+    bias.assign(output, 0.01);
   }
 
   linearLayer(const linearLayer &copy) {
